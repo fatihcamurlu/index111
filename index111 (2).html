@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8" />
+  <title>❤️</title>
+  <style>
+    body {
+      margin: 0;
+      height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      background: linear-gradient(135deg, #ffdde1, #ee9ca7);
+      font-family: Arial, sans-serif;
+      overflow: hidden;
+    }
+
+    .heart-container {
+      position: relative;
+      width: 320px;
+      height: 280px;
+      margin-bottom: 30px;
+    }
+
+    .small-heart {
+      position: absolute;
+      color: #e60026;
+      font-size: 16px;
+      opacity: 0;
+      animation: appear 0.3s forwards;
+    }
+
+    @keyframes appear {
+      from { transform: scale(0); opacity: 0; }
+      to { transform: scale(1); opacity: 1; }
+    }
+
+    .question-box {
+      display: none;
+      background: white;
+      padding: 20px 30px;
+      border-radius: 15px;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+      text-align: center;
+      min-width: 260px;
+      z-index: 10;
+    }
+
+    button {
+      padding: 12px 24px;
+      margin: 10px;
+      border: none;
+      border-radius: 20px;
+      cursor: pointer;
+      font-size: 16px;
+    }
+
+    .yes { background: #ff4d6d; color: white; }
+    .no { background: #ccc; }
+
+    button:hover { transform: scale(1.05); }
+  </style>
+</head>
+<body>
+
+  <div class="heart-container" id="heartContainer"></div>
+
+  <div class="question-box" id="questionBox">
+    <h2>Benimle tanıştığın için mutlumusun? ❤️</h2>
+    <button class="yes" onclick="answer(true)">Evet</button>
+    <button class="no" onclick="answer(false)">Hayır</button>
+  </div>
+
+  <script>
+    const container = document.getElementById("heartContainer");
+    const questionBox = document.getElementById("questionBox");
+
+    let noClickCount = 0;
+
+    // SADECE KALP DIŞ HATTI (İÇİ BOŞ)
+    const heartPoints = [];
+    const cx = 160;
+    const cy = 140;
+
+    for (let t = 0; t <= Math.PI * 2; t += 0.08) {
+      const x = 16 * Math.pow(Math.sin(t), 3);
+      const y = 13 * Math.cos(t) - 5 * Math.cos(2*t) - 2 * Math.cos(3*t) - Math.cos(4*t);
+      heartPoints.push([
+        cx + x * 6,
+        cy - y * 6
+      ]);
+    }
+
+    heartPoints.forEach((p, i) => {
+      setTimeout(() => {
+        const h = document.createElement("div");
+        h.className = "small-heart";
+        h.textContent = "❤";
+        h.style.left = p[0] + "px";
+        h.style.top = p[1] + "px";
+        container.appendChild(h);
+
+        if (i === heartPoints.length - 1) {
+          setTimeout(() => questionBox.style.display = "block", 600);
+        }
+      }, i * 40);
+    });
+
+    function answer(isYes) {
+      const yesBtn = document.querySelector('.yes');
+
+      if (isYes) {
+        questionBox.innerHTML = "<h2>❤️ Yeni yıl elimi tuttuğun her an gibi sıcak gözlerine baktığım her saniye gibi umut dolu olsun Sevgilim. ❤️</h2><p>SENİ ÇOK SEVİYORUM</p>";
+        return;
+      }
+
+      noClickCount++;
+
+      if (noClickCount === 1) {
+        yesBtn.style.position = 'fixed';
+        yesBtn.style.left = '0';
+        yesBtn.style.bottom = '0';
+        yesBtn.style.width = '50vw';
+        yesBtn.style.height = '50vh';
+        yesBtn.style.fontSize = '28px';
+        yesBtn.style.zIndex = '20';
+      } else if (noClickCount === 2) {
+        yesBtn.style.left = '0';
+        yesBtn.style.top = '0';
+        yesBtn.style.width = '100vw';
+        yesBtn.style.height = '100vh';
+        yesBtn.style.fontSize = '48px';
+        yesBtn.textContent = 'EVET ❤️';
+      }
+    }
+  </script>
+
+</body>
+</html>
